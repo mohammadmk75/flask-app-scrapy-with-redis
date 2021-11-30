@@ -1,0 +1,41 @@
+version: '3'
+services:
+  
+  web:
+        build: .
+        ports:
+            - "5001:5000"
+        volumes:
+            - .:/project
+  pgadmin:
+   
+    image: dpage/pgadmin4
+
+    ports:
+      - '9000:80'
+    network_mode: bridge
+
+    
+    external_links:
+      - postgres:postgres
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'admin@example.com'
+      PGADMIN_DEFAULT_PASSWORD: 'admin'
+
+  postgres:
+
+    image: postgres:alpine
+
+    ports:
+      - '5432:5432'
+    network_mode: bridge
+    container_name: postgres
+
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: '12341234'
+      POSTGRES_DB: 'sampledb'
+
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
